@@ -27,7 +27,7 @@ const ArchivedTable: React.FC<ArchivedTableProps> = ({ notes }) => {
   }
 
   return (
-    <table>
+    <table className="table">
       <thead>
         <tr>
           <th>Time of Creation</th>
@@ -45,11 +45,22 @@ const ArchivedTable: React.FC<ArchivedTableProps> = ({ notes }) => {
             <td>{note.category}</td>
             <td>{note.dates.join(", ")}</td>
             <td>
-              <button onClick={() => handleUnarchiveNote(note.id)}>
+              <button
+                className="btn btn-primary"
+                onClick={() => handleUnarchiveNote(note.id)}
+              >
                 Unarchive
               </button>
-              <button onClick={() => console.log("Edit clicked")}>Edit</button>
-              <button onClick={() => console.log("Remove clicked")}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => console.log("Edit clicked")}
+              >
+                Edit
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => console.log("Remove clicked")}
+              >
                 Remove
               </button>
             </td>

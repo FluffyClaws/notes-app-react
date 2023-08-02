@@ -27,27 +27,45 @@ const NotesPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <NoteForm />
-      <div>
-        <button onClick={handleViewActiveNotes}>View Active Notes</button>
-        <button onClick={handleViewArchivedNotes}>View Archived Notes</button>
-      </div>
+    <div className="container">
       {showArchivedTable ? (
         <>
-          <h2>Archived Notes</h2>
+          <h2 className="table-header">Archived Notes</h2>
           <ArchivedTable notes={archivedNotes} />
         </>
       ) : (
         <>
-          <h2>Active Notes</h2>
+          <h2 className="table-header">Active Notes</h2>
           <NoteTable notes={activeNotes} />
         </>
       )}
-      <div>
-        <button onClick={toggleSummaryVisibility}>
-          {showSummary ? "Hide Summary" : "Show Summary"}
-        </button>
+
+      <div className="cntrls-wrapper">
+        <NoteForm />
+        <div className="btns-wrapper">
+          <button
+            className={`btn ${
+              showArchivedTable ? "btn-secondary" : "btn-primary"
+            }`}
+            onClick={handleViewActiveNotes}
+          >
+            View Active Notes
+          </button>
+          <button
+            className={`btn ${
+              showArchivedTable ? "btn-primary" : "btn-secondary"
+            }`}
+            onClick={handleViewArchivedNotes}
+          >
+            View Archived Notes
+          </button>
+          <button
+            className={`btn ${showSummary ? "btn-secondary" : "btn-primary"}`}
+            onClick={toggleSummaryVisibility}
+          >
+            {showSummary ? "Hide Summary" : "Show Summary"}
+          </button>
+        </div>
       </div>
       {showSummary && <SummaryTable />}
     </div>

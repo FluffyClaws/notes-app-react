@@ -32,8 +32,8 @@ const SummaryTable: React.FC<SummaryTableProps> = ({ isSummary }) => {
 
   return (
     <>
-      <h2>Summary</h2>
-      <table>
+      <h2 className="table-header">Summary</h2>
+      <table className="table">
         <thead>
           <tr>
             <th>Category</th>
