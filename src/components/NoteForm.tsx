@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addNote } from "../store/notesSlice";
+import { formatDate } from "../utils/dateUtils";
+
+export const extractDatesFromContent = (text: string) => {
+  const dateRegex = /(\d{1,2}[\/.]\d{1,2}[\/.]\d{4})/g;
+  const datesFound = text.match(dateRegex);
+  return datesFound ? datesFound.map((date) => date.replace(/\./g, "/")) : [];
+};
 
 const NoteForm: React.FC = () => {
   const dispatch = useDispatch();
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("Task");
 
-  const extractDatesFromContent = (text: string) => {
-    const dateRegex = /(\d{1,2}[\/.]\d{1,2}[\/.]\d{4})/g; // Matches dates in the format dd/mm/yyyy or dd.mm.yyyy
-    const datesFound = text.match(dateRegex);
-    return datesFound ? datesFound.map((date) => date.replace(/\./g, "/")) : [];
-  };
-
   const handleAddNote = () => {
     const dates = extractDatesFromContent(content);
 
     const newNote = {
-      id: Date.now(), // Just a temporary way to generate unique IDs. You should use a better approach in a real app.
-      createdAt: new Date().toLocaleString("en-GB"), // Store the actual date and time of note creation
+      id: Date.now(),
+      createdAt: formatDate(new Date().toLocaleString("en-GB")),
       content,
       category,
       dates,

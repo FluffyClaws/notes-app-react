@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { extractDatesFromContent } from "../components/NoteForm";
 
 interface Note {
   id: number;
@@ -13,15 +14,72 @@ const initialNotes: Note[] = [
   // Prepopulated notes
   {
     id: 1,
-    createdAt: "2021-07-15",
+    createdAt: "30/07/2023 00:00",
     content:
       "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
     category: "Task",
-    dates: [""],
+    dates: [],
     archived: false,
   },
-  // Add more prepopulated notes as needed
+  {
+    id: 2,
+    createdAt: "30/07/2023 00:00",
+    content:
+      "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
+    category: "Random Thought",
+    dates: [],
+    archived: false,
+  },
+  {
+    id: 3,
+    createdAt: "30/07/2023 00:00",
+    content:
+      "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
+    category: "Idea",
+    dates: [],
+    archived: false,
+  },
+  {
+    id: 4,
+    createdAt: "30/07/2023 00:00",
+    content:
+      "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
+    category: "Random Thought",
+    dates: [],
+    archived: false,
+  },
+  {
+    id: 5,
+    createdAt: "30/07/2023 00:00",
+    content:
+      "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
+    category: "Idea",
+    dates: [],
+    archived: false,
+  },
+  {
+    id: 6,
+    createdAt: "30/07/2023 00:00",
+    content:
+      "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
+    category: "Task",
+    dates: [],
+    archived: false,
+  },
+  {
+    id: 7,
+    createdAt: "30/07/2023 00:00",
+    content:
+      "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
+    category: "Random Thought",
+    dates: [],
+    archived: false,
+  },
 ];
+
+initialNotes.forEach((note) => {
+  note.dates = extractDatesFromContent(note.content);
+});
 
 const notesSlice = createSlice({
   name: "notes",

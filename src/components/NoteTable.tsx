@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/rootReducer";
 import DateList from "./DateList";
 import { archiveNote, removeNote, editNote } from "../store/notesSlice";
+import { extractDatesFromContent } from "./NoteForm";
 import { formatDate } from "../utils/dateUtils";
 
 interface NoteTableProps {
@@ -46,7 +45,7 @@ const NoteTable: React.FC<NoteTableProps> = ({ notes, isSummary = false }) => {
         content: editedContent,
         category:
           notes.find((note) => note.id === editedNoteId)?.category || "",
-        dates: [], // You may want to extract dates from the edited content here if needed
+        dates: extractDatesFromContent(editedContent),
         archived: false,
       };
       dispatch(editNote(updatedNote));
