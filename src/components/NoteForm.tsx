@@ -5,12 +5,8 @@ import { formatDate } from "../utils/dateUtils";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Note } from "../store/types";
-
-export const extractDatesFromContent = (text: string) => {
-  const dateRegex = /(\d{1,2}[/.]\d{1,2}[/.]\d{4})/g;
-  const datesFound = text.match(dateRegex);
-  return datesFound ? datesFound.map((date) => date.replace(/\./g, "/")) : [];
-};
+import { extractDatesFromContent } from "../utils/noteUtils";
+import { validateFields } from "../utils/formUtils"; // Add this import
 
 const NoteForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,19 +17,8 @@ const NoteForm: React.FC = () => {
     category: "",
   });
 
-  const validateFields = () => {
-    const newErrors = { content: "", category: "" };
-    if (!content) {
-      newErrors.content = "Please fill out this field";
-    }
-    if (!category) {
-      newErrors.category = "Please select a category";
-    }
-    return newErrors;
-  };
-
   const handleAddNote = () => {
-    const newErrors = validateFields();
+    const newErrors = validateFields(content, category);
     if (newErrors.content || newErrors.category) {
       setErrors(newErrors);
       return;

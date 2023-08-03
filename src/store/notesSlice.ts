@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { extractDatesFromContent } from "../components/NoteForm";
 import { Note } from "./types";
+import { extractDatesFromContent } from "../utils/noteUtils";
 
 const initialNotes: Note[] = [
   // Prepopulated notes

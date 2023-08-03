@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { removeNote, unarchiveNote, editNote } from "../store/notesSlice";
 import { ArchivedTableProps, Note } from "../store/types";
+import { useTableHelpers } from "../utils/tableHelpers";
 
 const NoNotesRow: React.FC = () => (
   <tr>
@@ -12,34 +11,14 @@ const NoNotesRow: React.FC = () => (
 );
 
 const ArchivedTable: React.FC<ArchivedTableProps> = ({ notes }) => {
-  const dispatch = useDispatch();
   const [editedNote, setEditedNote] = useState<Note | null>(null);
 
-  const handleUnarchiveNote = (noteId: number) => {
-    dispatch(unarchiveNote(noteId));
-  };
-
-  const handleRemoveNote = (noteId: number) => {
-    dispatch(removeNote(noteId));
-  };
-
-  const handleEditNote = (noteId: number, content: string) => {
-    setEditedNote({
-      ...notes.find((note) => note.id === noteId)!,
-      content: content,
-    });
-  };
-
-  const handleSaveNote = () => {
-    if (editedNote) {
-      const updatedNote = {
-        ...editedNote,
-        archived: false,
-      };
-      dispatch(editNote(updatedNote));
-      setEditedNote(null);
-    }
-  };
+  const {
+    handleUnarchiveNote,
+    handleRemoveNote,
+    handleEditNote,
+    handleSaveNote,
+  } = useTableHelpers(notes, editedNote, setEditedNote);
 
   return (
     <div className="table-responsive">
