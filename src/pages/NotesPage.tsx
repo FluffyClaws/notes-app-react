@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
 import NoteForm from "../components/NoteForm";
@@ -6,13 +6,22 @@ import NoteTable from "../components/NoteTable";
 import ArchivedTable from "../components/ArchivedTable";
 import SummaryTable from "../components/SummaryTable";
 
+const useActiveNotes = () => {
+  const notes = useSelector((state: RootState) => state.notes);
+  return useMemo(() => notes.filter((note) => !note.archived), [notes]);
+};
+
+const useArchivedNotes = () => {
+  const notes = useSelector((state: RootState) => state.notes);
+  return useMemo(() => notes.filter((note) => note.archived), [notes]);
+};
+
 const NotesPage: React.FC = () => {
   const [showSummary, setShowSummary] = useState(false);
   const [showArchivedTable, setShowArchivedTable] = useState(false);
 
-  const notes = useSelector((state: RootState) => state.notes);
-  const activeNotes = notes.filter((note) => !note.archived);
-  const archivedNotes = notes.filter((note) => note.archived);
+  const activeNotes = useActiveNotes();
+  const archivedNotes = useArchivedNotes();
 
   const handleViewArchivedNotes = () => {
     setShowArchivedTable(true);

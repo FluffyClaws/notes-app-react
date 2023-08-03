@@ -1,19 +1,6 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { removeNote, unarchiveNote, editNote } from "../store/notesSlice";
-
-interface Note {
-  id: number;
-  createdAt: string;
-  content: string;
-  category: string;
-  dates: string[];
-  archived: boolean;
-}
-
-interface ArchivedTableProps {
-  notes: Note[];
-}
+import { ArchivedTableProps, Note } from "../store/types";
+import { useTableHelpers } from "../utils/tableHelpers";
 
 const NoNotesRow: React.FC = () => (
   <tr>
@@ -24,40 +11,14 @@ const NoNotesRow: React.FC = () => (
 );
 
 const ArchivedTable: React.FC<ArchivedTableProps> = ({ notes }) => {
-  const dispatch = useDispatch();
-  const [editedNoteId, setEditedNoteId] = useState<number | null>(null);
-  const [editedContent, setEditedContent] = useState("");
+  const [editedNote, setEditedNote] = useState<Note | null>(null);
 
-  const handleUnarchiveNote = (noteId: number) => {
-    dispatch(unarchiveNote(noteId));
-  };
-
-  const handleRemoveNote = (noteId: number) => {
-    dispatch(removeNote(noteId));
-  };
-
-  const handleEditNote = (noteId: number, content: string) => {
-    setEditedNoteId(noteId);
-    setEditedContent(content);
-  };
-
-  const handleSaveNote = () => {
-    if (editedNoteId !== null) {
-      const updatedNote = {
-        id: editedNoteId,
-        createdAt:
-          notes.find((note) => note.id === editedNoteId)?.createdAt || "",
-        content: editedContent,
-        category:
-          notes.find((note) => note.id === editedNoteId)?.category || "",
-        dates: notes.find((note) => note.id === editedNoteId)?.dates || [],
-        archived: false,
-      };
-      dispatch(editNote(updatedNote));
-      setEditedNoteId(null);
-      setEditedContent("");
-    }
-  };
+  const {
+    handleUnarchiveNote,
+    handleRemoveNote,
+    handleEditNote,
+    handleSaveNote,
+  } = useTableHelpers(notes, editedNote, setEditedNote);
 
   return (
     <div className="table-responsive">
@@ -75,59 +36,70 @@ const ArchivedTable: React.FC<ArchivedTableProps> = ({ notes }) => {
           {notes.length === 0 ? (
             <NoNotesRow />
           ) : (
-            notes.map((note) => (
-              <tr key={note.id}>
-                <td className="col-content table-secondary">
-                  {note.createdAt}
-                </td>
-                <td className="table-secondary">
-                  {editedNoteId === note.id ? (
-                    <input
-                      type="text"
-                      value={editedContent}
-                      onChange={(e) => setEditedContent(e.target.value)}
-                    />
-                  ) : (
-                    note.content
-                  )}
-                </td>
-                <td className="col-content table-secondary">{note.category}</td>
-                <td className="col-content table-secondary">
-                  {note.dates.join(", ")}
-                </td>
-                <td className="col-content table-secondary actions-cell">
-                  {editedNoteId === note.id ? (
-                    <button
-                      className="btn btn-primary"
-                      onClick={handleSaveNote}
-                    >
-                      Save
-                    </button>
-                  ) : (
-                    <>
+            notes.map((note) => {
+              const isEdited = editedNote && editedNote.id === note.id;
+
+              return (
+                <tr key={note.id}>
+                  <td className="col-content table-secondary">
+                    {note.createdAt}
+                  </td>
+                  <td className="table-secondary">
+                    {isEdited ? (
+                      <input
+                        type="text"
+                        value={editedNote!.content}
+                        onChange={(e) =>
+                          setEditedNote({
+                            ...editedNote!,
+                            content: e.target.value,
+                          })
+                        }
+                      />
+                    ) : (
+                      note.content
+                    )}
+                  </td>
+                  <td className="col-content table-secondary">
+                    {note.category}
+                  </td>
+                  <td className="col-content table-secondary">
+                    {note.dates.join(", ")}
+                  </td>
+                  <td className="col-content table-secondary actions-cell">
+                    {isEdited ? (
                       <button
                         className="btn btn-primary"
-                        onClick={() => handleEditNote(note.id, note.content)}
+                        onClick={handleSaveNote}
                       >
-                        Edit
+                        Save
                       </button>
-                      <button
-                        className="btn btn-primary"
-                        onClick={() => handleUnarchiveNote(note.id)}
-                      >
-                        Unarchive
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleRemoveNote(note.id)}
-                      >
-                        Remove
-                      </button>
-                    </>
-                  )}
-                </td>
-              </tr>
-            ))
+                    ) : (
+                      <>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleEditNote(note.id, note.content)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleUnarchiveNote(note.id)}
+                        >
+                          Unarchive
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleRemoveNote(note.id)}
+                        >
+                          Remove
+                        </button>
+                      </>
+                    )}
+                  </td>
+                </tr>
+              );
+            })
           )}
         </tbody>
       </table>
