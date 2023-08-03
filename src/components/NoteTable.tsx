@@ -19,6 +19,14 @@ interface Note {
   archived: boolean;
 }
 
+const NoNotesRow: React.FC = () => (
+  <tr>
+    <td colSpan={5} className="table-secondary">
+      <h2 className="col-content">There are no notes yet</h2>
+    </td>
+  </tr>
+);
+
 const NoteTable: React.FC<NoteTableProps> = ({ notes, isSummary = false }) => {
   const dispatch = useDispatch();
   const [editedNoteId, setEditedNoteId] = useState<number | null>(null);
@@ -54,10 +62,6 @@ const NoteTable: React.FC<NoteTableProps> = ({ notes, isSummary = false }) => {
     }
   };
 
-  if (notes.length === 0) {
-    return <p>There are no notes yet.</p>;
-  }
-
   return (
     <div className="table-responsive">
       <table className="table">
@@ -67,65 +71,69 @@ const NoteTable: React.FC<NoteTableProps> = ({ notes, isSummary = false }) => {
             <th className="col-header">Note Content</th>
             <th className="col-header">Note Category</th>
             <th className="col-header">Dates Mentioned (DD/MM/YYYY)</th>
-            {!isSummary && <th className="col-header">Actions</th>}
+            {!isSummary && <th className="col-header actions-cell">Actions</th>}
           </tr>
         </thead>
         <tbody>
-          {notes.map((note) => (
-            <tr key={note.id}>
-              <td className="col-content table-secondary">
-                {formatDate(note.createdAt)}
-              </td>
-              <td className="table-secondary">
-                {editedNoteId === note.id ? (
-                  <input
-                    type="text"
-                    value={editedContent}
-                    onChange={(e) => setEditedContent(e.target.value)}
-                  />
-                ) : (
-                  note.content
-                )}
-              </td>
-              <td className="col-content table-secondary">{note.category}</td>
-              <td className="col-content table-secondary">
-                <DateList dates={note.dates} />
-              </td>
-              {!isSummary && (
+          {notes.length === 0 ? (
+            <NoNotesRow />
+          ) : (
+            notes.map((note) => (
+              <tr key={note.id}>
                 <td className="col-content table-secondary">
+                  {formatDate(note.createdAt)}
+                </td>
+                <td className="table-secondary">
                   {editedNoteId === note.id ? (
-                    <button
-                      className="btn btn-primary"
-                      onClick={handleSaveNote}
-                    >
-                      Save
-                    </button>
+                    <input
+                      type="text"
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                    />
                   ) : (
-                    <>
-                      <button
-                        className="btn btn-secondary"
-                        onClick={() => handleEditNote(note.id, note.content)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleArchiveNote(note.id)}
-                      >
-                        Archive
-                      </button>
-                      <button
-                        className="btn btn-danger"
-                        onClick={() => handleRemoveNote(note.id)}
-                      >
-                        Remove
-                      </button>
-                    </>
+                    note.content
                   )}
                 </td>
-              )}
-            </tr>
-          ))}
+                <td className="col-content table-secondary">{note.category}</td>
+                <td className="col-content table-secondary ">
+                  <DateList dates={note.dates} />
+                </td>
+                {!isSummary && (
+                  <td className="col-content table-secondary actions-cell">
+                    {editedNoteId === note.id ? (
+                      <button
+                        className="btn btn-primary"
+                        onClick={handleSaveNote}
+                      >
+                        Save
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleEditNote(note.id, note.content)}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => handleArchiveNote(note.id)}
+                        >
+                          Archive
+                        </button>
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => handleRemoveNote(note.id)}
+                        >
+                          Remove
+                        </button>
+                      </>
+                    )}
+                  </td>
+                )}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
     </div>

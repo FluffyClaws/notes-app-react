@@ -6,6 +6,14 @@ interface SummaryTableProps {
   isSummary?: boolean;
 }
 
+const NoSummaryRow: React.FC = () => (
+  <tr>
+    <td colSpan={3} className="table-secondary">
+      <h2 className="col-content">There are no notes yet</h2>
+    </td>
+  </tr>
+);
+
 const SummaryTable: React.FC<SummaryTableProps> = ({ isSummary }) => {
   const notes = useSelector((state: RootState) => state.notes);
   const activeNotes = notes.filter((note) => !note.archived);
@@ -24,8 +32,12 @@ const SummaryTable: React.FC<SummaryTableProps> = ({ isSummary }) => {
   if (noActiveNotes && noArchivedNotes) {
     return (
       <>
-        <h2>Summary</h2>
-        <p>There are no notes yet.</p>
+        <h2 className="table-header">Summary</h2>
+        <table className="table">
+          <tbody>
+            <NoSummaryRow />
+          </tbody>
+        </table>
       </>
     );
   }

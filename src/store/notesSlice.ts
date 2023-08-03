@@ -28,7 +28,7 @@ const initialNotes: Note[] = [
       "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
     category: "Random Thought",
     dates: [],
-    archived: false,
+    archived: true,
   },
   {
     id: 3,
@@ -55,7 +55,7 @@ const initialNotes: Note[] = [
       "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
     category: "Idea",
     dates: [],
-    archived: false,
+    archived: true,
   },
   {
     id: 6,

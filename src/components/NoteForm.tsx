@@ -22,13 +22,13 @@ const NoteForm: React.FC = () => {
     if (!content) {
       setContentError("Please fill out this field");
     } else {
-      setContentError(""); // Clear the error message if content is provided
+      setContentError("");
     }
 
     if (!category) {
       setCategoryError("Please select a category");
     } else {
-      setCategoryError(""); // Clear the error message if category is selected
+      setCategoryError("");
     }
 
     if (!content || !category) {

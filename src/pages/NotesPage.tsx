@@ -43,26 +43,13 @@ const NotesPage: React.FC = () => {
       <div className="cntrls-wrapper">
         <NoteForm />
         <div className="btns-wrapper">
-          <button
-            className={`btn ${
-              showArchivedTable ? "btn-secondary" : "btn-primary"
-            }`}
-            onClick={handleViewActiveNotes}
-          >
+          <button className="btn btn-primary" onClick={handleViewActiveNotes}>
             View Active Notes
           </button>
-          <button
-            className={`btn ${
-              showArchivedTable ? "btn-primary" : "btn-secondary"
-            }`}
-            onClick={handleViewArchivedNotes}
-          >
+          <button className="btn btn-primary" onClick={handleViewArchivedNotes}>
             View Archived Notes
           </button>
-          <button
-            className={`btn ${showSummary ? "btn-secondary" : "btn-primary"}`}
-            onClick={toggleSummaryVisibility}
-          >
+          <button className="btn btn-primary" onClick={toggleSummaryVisibility}>
             {showSummary ? "Hide Summary" : "Show Summary"}
           </button>
         </div>
