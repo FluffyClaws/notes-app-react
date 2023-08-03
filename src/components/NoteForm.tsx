@@ -6,7 +6,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import { Note } from "../store/types";
 import { extractDatesFromContent } from "../utils/noteUtils";
-import { validateFields } from "../utils/formUtils"; // Add this import
+import { validateFields } from "../utils/formUtils";
 
 const NoteForm: React.FC = () => {
   const dispatch = useDispatch();
@@ -40,6 +40,13 @@ const NoteForm: React.FC = () => {
     setCategory("");
   };
 
+  const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setContent(inputValue);
+  };
+
+  const hasExceededLimit = content.length > 106;
+
   return (
     <div className="form-container">
       <OverlayTrigger
@@ -54,7 +61,7 @@ const NoteForm: React.FC = () => {
           }`}
           placeholder="Note Content"
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={handleContentChange}
         />
       </OverlayTrigger>
       <OverlayTrigger
@@ -73,7 +80,14 @@ const NoteForm: React.FC = () => {
           <option value="Idea">Idea</option>
         </select>
       </OverlayTrigger>
-      <button className="btn btn-primary" onClick={handleAddNote}>
+      {hasExceededLimit && (
+        <span className="text-danger">Character limit exceeded</span>
+      )}
+      <button
+        className="btn btn-primary"
+        onClick={handleAddNote}
+        disabled={hasExceededLimit}
+      >
         Add Note
       </button>
     </div>
