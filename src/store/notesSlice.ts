@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { extractDatesFromContent } from "../components/NoteForm";
-
-interface Note {
-  id: number;
-  createdAt: string;
-  content: string;
-  category: string;
-  dates: string[];
-  archived: boolean;
-}
+import { Note } from "./types";
 
 const initialNotes: Note[] = [
   // Prepopulated notes
@@ -64,7 +56,7 @@ const initialNotes: Note[] = [
       "I'm gonna have a dentist appointment on the 3/5/2021, I moved it from 5/5/2021",
     category: "Task",
     dates: [],
-    archived: false,
+    archived: true,
   },
   {
     id: 7,

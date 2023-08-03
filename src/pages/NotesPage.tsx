@@ -11,8 +11,16 @@ const NotesPage: React.FC = () => {
   const [showArchivedTable, setShowArchivedTable] = useState(false);
 
   const notes = useSelector((state: RootState) => state.notes);
-  const activeNotes = notes.filter((note) => !note.archived);
-  const archivedNotes = notes.filter((note) => note.archived);
+
+  const activeNotes = React.useMemo(
+    () => notes.filter((note) => !note.archived),
+    [notes],
+  );
+
+  const archivedNotes = React.useMemo(
+    () => notes.filter((note) => note.archived),
+    [notes],
+  );
 
   const handleViewArchivedNotes = () => {
     setShowArchivedTable(true);

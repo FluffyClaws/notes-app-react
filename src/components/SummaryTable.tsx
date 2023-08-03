@@ -1,10 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
-
-interface SummaryTableProps {
-  isSummary?: boolean;
-}
+import { SummaryTableProps } from "../store/types";
 
 const NoSummaryRow: React.FC = () => (
   <tr>
@@ -16,17 +13,33 @@ const NoSummaryRow: React.FC = () => (
 
 const SummaryTable: React.FC<SummaryTableProps> = ({ isSummary }) => {
   const notes = useSelector((state: RootState) => state.notes);
-  const activeNotes = notes.filter((note) => !note.archived);
-  const archivedNotes = notes.filter((note) => note.archived);
 
-  const countByCategory = (category: string, isArchived: boolean) => {
-    const targetNotes = isArchived ? archivedNotes : activeNotes;
-    return targetNotes.filter((note) => note.category === category).length;
-  };
+  // Calculate the counts for each category and archive status
+  const countsByCategory = notes.reduce(
+    (counts, note) => {
+      if (note.archived) {
+        counts.archived[note.category] =
+          (counts.archived[note.category] || 0) + 1;
+      } else {
+        counts.active[note.category] = (counts.active[note.category] || 0) + 1;
+      }
+      return counts;
+    },
+    { active: {}, archived: {} } as {
+      active: Record<string, number>;
+      archived: Record<string, number>;
+    },
+  );
+
+  const categories = ["Task", "Random Thought", "Idea"];
 
   // Check if there are no active and archived notes
-  const noActiveNotes = activeNotes.length === 0;
-  const noArchivedNotes = archivedNotes.length === 0;
+  const noActiveNotes = Object.values(countsByCategory.active).every(
+    (count) => count === 0,
+  );
+  const noArchivedNotes = Object.values(countsByCategory.archived).every(
+    (count) => count === 0,
+  );
 
   // Render the message if there are no notes in both active and archived tables
   if (noActiveNotes && noArchivedNotes) {
@@ -54,21 +67,13 @@ const SummaryTable: React.FC<SummaryTableProps> = ({ isSummary }) => {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Task</td>
-            <td>{countByCategory("Task", false)}</td>
-            <td>{countByCategory("Task", true)}</td>
-          </tr>
-          <tr>
-            <td>Random Thought</td>
-            <td>{countByCategory("Random Thought", false)}</td>
-            <td>{countByCategory("Random Thought", true)}</td>
-          </tr>
-          <tr>
-            <td>Idea</td>
-            <td>{countByCategory("Idea", false)}</td>
-            <td>{countByCategory("Idea", true)}</td>
-          </tr>
+          {categories.map((category) => (
+            <tr key={category}>
+              <td>{category}</td>
+              <td>{countsByCategory.active[category] || 0}</td>
+              <td>{countsByCategory.archived[category] || 0}</td>
+            </tr>
+          ))}
         </tbody>
       </table>
     </>

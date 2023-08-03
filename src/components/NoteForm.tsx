@@ -4,6 +4,7 @@ import { addNote } from "../store/notesSlice";
 import { formatDate } from "../utils/dateUtils";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import { Note } from "../store/types";
 
 export const extractDatesFromContent = (text: string) => {
   const dateRegex = /(\d{1,2}[/.]\d{1,2}[/.]\d{4})/g;
@@ -15,30 +16,32 @@ const NoteForm: React.FC = () => {
   const dispatch = useDispatch();
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("");
-  const [contentError, setContentError] = useState("");
-  const [categoryError, setCategoryError] = useState("");
+  const [errors, setErrors] = useState<{ content: string; category: string }>({
+    content: "",
+    category: "",
+  });
+
+  const validateFields = () => {
+    const newErrors = { content: "", category: "" };
+    if (!content) {
+      newErrors.content = "Please fill out this field";
+    }
+    if (!category) {
+      newErrors.category = "Please select a category";
+    }
+    return newErrors;
+  };
 
   const handleAddNote = () => {
-    if (!content) {
-      setContentError("Please fill out this field");
-    } else {
-      setContentError("");
-    }
-
-    if (!category) {
-      setCategoryError("Please select a category");
-    } else {
-      setCategoryError("");
-    }
-
-    if (!content || !category) {
-      // Show an error message and prevent the note from being added
+    const newErrors = validateFields();
+    if (newErrors.content || newErrors.category) {
+      setErrors(newErrors);
       return;
     }
 
     const dates = extractDatesFromContent(content);
 
-    const newNote = {
+    const newNote: Note = {
       id: Date.now(),
       createdAt: formatDate(new Date().toLocaleString("en-GB")),
       content,
@@ -46,6 +49,7 @@ const NoteForm: React.FC = () => {
       dates,
       archived: false,
     };
+
     dispatch(addNote(newNote));
     setContent("");
     setCategory("");
@@ -55,12 +59,14 @@ const NoteForm: React.FC = () => {
     <div className="form-container">
       <OverlayTrigger
         placement="bottom"
-        overlay={<Tooltip id="content-tooltip">{contentError}</Tooltip>}
-        show={!!contentError}
+        overlay={<Tooltip id="content-tooltip">{errors.content}</Tooltip>}
+        show={!!errors.content}
       >
         <input
           type="text"
-          className={`form-input form-control ${contentError && "is-invalid"}`}
+          className={`form-input form-control ${
+            errors.content && "is-invalid"
+          }`}
           placeholder="Note Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
@@ -68,11 +74,11 @@ const NoteForm: React.FC = () => {
       </OverlayTrigger>
       <OverlayTrigger
         placement="bottom"
-        overlay={<Tooltip id="category-tooltip">{categoryError}</Tooltip>}
-        show={!!categoryError}
+        overlay={<Tooltip id="category-tooltip">{errors.category}</Tooltip>}
+        show={!!errors.category}
       >
         <select
-          className={`form-control ${categoryError && "is-invalid"}`}
+          className={`form-control ${errors.category && "is-invalid"}`}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >

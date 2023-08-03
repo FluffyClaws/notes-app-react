@@ -4,20 +4,7 @@ import DateList from "./DateList";
 import { archiveNote, removeNote, editNote } from "../store/notesSlice";
 import { extractDatesFromContent } from "./NoteForm";
 import { formatDate } from "../utils/dateUtils";
-
-interface NoteTableProps {
-  notes: Note[];
-  isSummary?: boolean;
-}
-
-interface Note {
-  id: number;
-  createdAt: string;
-  content: string;
-  category: string;
-  dates: string[];
-  archived: boolean;
-}
+import { NoteTableProps } from "../store/types";
 
 const NoNotesRow: React.FC = () => (
   <tr>

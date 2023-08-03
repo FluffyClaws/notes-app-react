@@ -1,11 +1,8 @@
 import React from "react";
+import { DateListProps } from "../store/types";
 
-interface Props {
-  dates: string[];
-}
-
-const DateList: React.FC<Props> = ({ dates }) => {
+const DateList: React.FC<DateListProps> = ({ dates }) => {
   return <>{dates.join(", ")}</>;
 };
 
-export default DateList;
+export default React.memo(DateList);
