@@ -8,8 +8,10 @@ import { extractDatesFromContent } from "../utils/noteUtils";
 
 const NoNotesRow: React.FC = () => (
   <tr>
-    <td colSpan={5} className="table-secondary">
-      <h2 className="col-content">There are no notes yet</h2>
+    <td colSpan={5} className="bg-gray-100 p-4 text-center">
+      <h2 className="text-2xl font-semibold text-center my-4">
+        There are no notes yet
+      </h2>
     </td>
   </tr>
 );
@@ -51,14 +53,14 @@ const NoteTable: React.FC<NoteTableProps> = ({ notes, isSummary = false }) => {
 
   return (
     <div className="table-responsive">
-      <table className="table">
+      <table className="w-full border-collapse border border-gray-300">
         <thead>
-          <tr className="table-primary">
-            <th className="col-header">Time of Creation</th>
-            <th className="col-header">Note Content</th>
-            <th className="col-header">Note Category</th>
-            <th className="col-header">Dates Mentioned (DD/MM/YYYY)</th>
-            {!isSummary && <th className="col-header actions-cell">Actions</th>}
+          <tr className="bg-blue-200">
+            <th className="p-3">Time of Creation</th>
+            <th className="p-3">Note Content</th>
+            <th className="p-3 ">Note Category</th>
+            <th className="p-3 ">Dates Mentioned (DD/MM/YYYY)</th>
+            {!isSummary && <th className="p-3">Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -67,54 +69,57 @@ const NoteTable: React.FC<NoteTableProps> = ({ notes, isSummary = false }) => {
           ) : (
             notes.map((note) => (
               <tr key={note.id}>
-                <td className="col-content table-secondary">
+                <td className="p-3 border-t border-gray-300">
                   {formatDate(note.createdAt)}
                 </td>
-                <td className="table-secondary">
+                <td className="p-3 border-t border-gray-300">
                   {editedNoteId === note.id ? (
                     <input
                       type="text"
                       value={editedContent}
                       onChange={(e) => setEditedContent(e.target.value)}
+                      className="w-full border border-gray-300 p-1 rounded"
                     />
                   ) : (
                     note.content
                   )}
                 </td>
-                <td className="col-content table-secondary">{note.category}</td>
-                <td className="col-content table-secondary ">
+                <td className="p-3 border-t border-gray-300 text-center">
+                  {note.category}
+                </td>
+                <td className="p-3 border-t border-gray-300 text-center">
                   <DateList dates={note.dates} />
                 </td>
                 {!isSummary && (
-                  <td className="col-content table-secondary actions-cell">
+                  <td className="p-3 border-t border-gray-300 flex justify-center">
                     {editedNoteId === note.id ? (
                       <button
-                        className="btn btn-primary"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
                         onClick={handleSaveNote}
                       >
                         Save
                       </button>
                     ) : (
-                      <>
+                      <div className="flex justify-center">
                         <button
-                          className="btn btn-primary"
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-1"
                           onClick={() => handleEditNote(note.id, note.content)}
                         >
                           Edit
                         </button>
                         <button
-                          className="btn btn-primary"
+                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded mr-1"
                           onClick={() => handleArchiveNote(note.id)}
                         >
                           Archive
                         </button>
                         <button
-                          className="btn btn-danger"
+                          className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
                           onClick={() => handleRemoveNote(note.id)}
                         >
                           Remove
                         </button>
-                      </>
+                      </div>
                     )}
                   </td>
                 )}

@@ -36,29 +36,38 @@ const NotesPage: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mx-auto p-4">
       {showArchivedTable ? (
-        <>
-          <h2 className="table-header">Archived Notes</h2>
+        <div className="mb-4">
+          <h2 className="text-2xl font-semibold text-center">Archived Notes</h2>
           <ArchivedTable notes={archivedNotes} />
-        </>
+        </div>
       ) : (
-        <>
-          <h2 className="table-header">Active Notes</h2>
+        <div className="mb-4">
+          <h2 className="text-2xl font-semibold text-center">Active Notes</h2>
           <NoteTable notes={activeNotes} />
-        </>
+        </div>
       )}
 
-      <div className="cntrls-wrapper">
+      <div className="flex flex-col md:flex-row items-center justify-between mt-4">
         <NoteForm />
-        <div className="btns-wrapper">
-          <button className="btn btn-primary" onClick={handleViewActiveNotes}>
+        <div className="flex space-x-2 mt-4 md:mt-0">
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+            onClick={handleViewActiveNotes}
+          >
             View Active Notes
           </button>
-          <button className="btn btn-primary" onClick={handleViewArchivedNotes}>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+            onClick={handleViewArchivedNotes}
+          >
             View Archived Notes
           </button>
-          <button className="btn btn-primary" onClick={toggleSummaryVisibility}>
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+            onClick={toggleSummaryVisibility}
+          >
             {showSummary ? "Hide Summary" : "Show Summary"}
           </button>
         </div>
