@@ -15,21 +15,6 @@
 
 ## Technologies
 
-- React.js for building the front-end user interface
+- React for building the front-end user interface
 - Redux for state management
 - Bootstrap for styling
-
-## Installation
-
-To install and set up app locally, follow these steps:
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/your-repo.git
-
-# Install dependencies
-cd your-repo
-npm install
-
-# Start the development server:
-npm start
